@@ -1,5 +1,28 @@
-import ProcessText from './NativeProcessText';
+// ProcessText.ts
+import { NativeEventEmitter, NativeModules } from 'react-native'
+import NativeProcessText from './NativeProcessText'
 
-export function multiply(a: number, b: number): number {
-  return ProcessText.multiply(a, b);
+const { ProcessText } = NativeModules
+
+const emitter = new NativeEventEmitter(ProcessText)
+
+export function setProcessTextEnabled(enabled: boolean) {
+    return NativeProcessText.setProcessTextIntentEnabled(enabled)
+}
+
+export function isProcessTextEnabled(): Promise<boolean> {
+    return NativeProcessText.isProcessTextIntentEnabled()
+}
+
+export function addProcessTextListener(listener: (text: string) => void) {
+    return emitter.addListener('onRNProcessTextModule', (event) => {
+        console.log(event)
+        if (typeof event === 'string') {
+            listener(event)
+        }
+    })
+}
+
+export function getProcessTextIntent() {
+    return NativeProcessText.getProcessTextIntent()
 }
