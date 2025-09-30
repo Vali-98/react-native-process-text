@@ -7,7 +7,7 @@ This only works for Android. iOS wil simply return stub values.
 ## Installation
 
 ```sh
-npm install react-native-process-text
+npm install "@vali98/react-native-process-text"
 ```
 
 ## Usage
