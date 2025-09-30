@@ -1,6 +1,6 @@
 {
     "name": "@vali98/react-native-process-text",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "An Android process text intent module for React Native",
     "main": "./lib/module/index.js",
     "types": "./lib/typescript/src/index.d.ts",
@@ -20,6 +20,7 @@
         "cpp",
         "*.podspec",
         "react-native.config.js",
+        "app.plugin.js",
         "!ios/build",
         "!android/build",
         "!android/gradle",
