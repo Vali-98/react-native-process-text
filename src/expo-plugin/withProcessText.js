@@ -1,10 +1,15 @@
 const { withAndroidManifest } = require('@expo/config-plugins')
 
-const withProcessTextActivity = (config) => {
+/**
+ * Adds a ProcessTextActivity to AndroidManifest with a custom label.
+ * @param {import('@expo/config-plugins').ExpoConfig} config
+ * @param {{ label?: string }} options
+ */
+const withProcessTextActivity = (config, { label = 'Process Text' } = {}) => {
     return withAndroidManifest(config, (config) => {
         const androidManifest = config.modResults
 
-        // Check if activity already exists to avoid duplicates
+        // Avoid adding duplicate activity
         const existingActivity = androidManifest.manifest.application[0].activity?.find(
             (activity) => activity.$['android:name'] === 'com.processtext.ProcessTextActivity'
         )
@@ -19,6 +24,7 @@ const withProcessTextActivity = (config) => {
                         'android:launchMode': 'singleTask',
                         'android:taskAffinity': '${applicationId}.processtext',
                         'android:excludeFromRecents': 'true',
+                        'android:label': label,
                     },
                     'intent-filter': [
                         {
