@@ -25,6 +25,7 @@ export function useTextIntentOnForeground(
                 getTextIntentResult().then(callback)
             }
         }
+        getTextIntentResult().then(callback)
         const appState = AppState.addEventListener('change', listener)
         return () => appState.remove()
     }, [callback, ...deps])
