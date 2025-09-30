@@ -1,6 +1,8 @@
 # react-native-process-text
 
-An Android process text module for React Native
+An Android process text module for React Native.
+
+This only works for Android. iOS wil simply return stub values.
 
 ## Installation
 
