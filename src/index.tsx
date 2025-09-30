@@ -1,28 +1,49 @@
 // ProcessText.ts
-import { NativeEventEmitter, NativeModules } from 'react-native'
+import { useEffect, useState } from 'react'
+import { AppState, type AppStateStatus } from 'react-native'
 import NativeProcessText from './NativeProcessText'
 
-const { ProcessText } = NativeModules
-
-const emitter = new NativeEventEmitter(ProcessText)
-
-export function setProcessTextEnabled(enabled: boolean) {
+export function setTextIntentEnabled(enabled: boolean) {
     return NativeProcessText.setProcessTextIntentEnabled(enabled)
 }
 
-export function isProcessTextEnabled(): Promise<boolean> {
+export function getTextIntentEnabled(): Promise<boolean> {
     return NativeProcessText.isProcessTextIntentEnabled()
 }
 
-export function addProcessTextListener(listener: (text: string) => void) {
-    return emitter.addListener('onRNProcessTextModule', (event) => {
-        console.log(event)
-        if (typeof event === 'string') {
-            listener(event)
-        }
-    })
+export function getTextIntentResult() {
+    return NativeProcessText.getProcessTextIntent()
 }
 
-export function getProcessTextIntent() {
-    return NativeProcessText.getProcessTextIntent()
+export function useTextIntentOnForeground(
+    callback: (text: string | null) => void,
+    deps: any[] = []
+) {
+    useEffect(() => {
+        const listener = (state: AppStateStatus) => {
+            if (state === 'active') {
+                getTextIntentResult().then(callback)
+            }
+        }
+        const appState = AppState.addEventListener('change', listener)
+        return () => appState.remove()
+    }, deps)
+}
+
+export function useTextIntentStatus() {
+    const [enabled, setEnabledInternal] = useState(false)
+
+    useEffect(() => {
+        getTextIntentEnabled().then((result) => {
+            setEnabledInternal(result)
+        })
+    }, [])
+
+    const setEnabled = async (enabledStart: boolean) => {
+        await setTextIntentEnabled(enabledStart)
+        const enabledEnd = await getTextIntentEnabled()
+        setEnabledInternal(enabledEnd)
+    }
+
+    return { enabled, setEnabled }
 }

@@ -4,23 +4,24 @@ An Android process text module for React Native
 
 ## Installation
 
-
 ```sh
 npm install react-native-process-text
 ```
 
-
 ## Usage
 
-
 ```js
-import { multiply } from 'react-native-process-text';
+import { useTextIntentStatus, useTextIntentOnForeground } from 'react-native-process-text'
 
-// ...
 
-const result = multiply(3, 7);
+const App = () => {
+    const [text, setText] = useState('')
+    // useful helper functions
+    const { enabled, setEnabled } = useTextIntentStatus()
+    useTextIntentOnForeground((a) => a && setText(a), [])
+    // ...
+
 ```
-
 
 ## Contributing
 

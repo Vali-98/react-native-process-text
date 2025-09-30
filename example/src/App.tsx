@@ -1,37 +1,11 @@
-import { useEffect, useState } from 'react'
-import {
-    Text,
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    type AppStateStatus,
-    AppState,
-} from 'react-native'
-import {
-    getProcessTextIntent,
-    isProcessTextEnabled,
-    setProcessTextEnabled,
-} from 'react-native-process-text'
+import { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useTextIntentStatus, useTextIntentOnForeground } from 'react-native-process-text'
 
 export default function App() {
     const [text, setText] = useState('')
-
-    const [enabled, setEnabled] = useState(false)
-
-    useEffect(() => {
-        isProcessTextEnabled().then((a) => {
-            console.log('Enabled', a)
-            setEnabled(a)
-        })
-
-        const listener = (state: AppStateStatus) => {
-            if (state === 'active') {
-                getProcessTextIntent().then((a) => a && setText(a))
-            }
-        }
-        const appState = AppState.addEventListener('change', listener)
-        return () => appState.remove()
-    }, [])
+    const { enabled, setEnabled } = useTextIntentStatus()
+    useTextIntentOnForeground((a) => a && setText(a), [])
 
     return (
         <View style={styles.container}>
@@ -39,12 +13,7 @@ export default function App() {
             <Text>Enabled: {enabled ? 'True' : 'False'}</Text>
             <TouchableOpacity
                 onPress={() => {
-                    setProcessTextEnabled(!enabled).then(() => {
-                        isProcessTextEnabled().then((a) => {
-                            console.log('Enabled', a)
-                            setEnabled(a)
-                        })
-                    })
+                    setEnabled(!enabled)
                 }}>
                 <Text>Toggle</Text>
             </TouchableOpacity>
