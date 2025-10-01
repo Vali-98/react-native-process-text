@@ -1,4 +1,4 @@
-const { withAndroidManifest } = require('@expo/config-plugins')
+const { withAndroidManifest, createRunOncePlugin } = require('@expo/config-plugins')
 
 /**
  * Adds a ProcessTextActivity to AndroidManifest with a custom label.
@@ -45,4 +45,7 @@ const withProcessTextActivity = (config, { label = 'Process Text' } = {}) => {
     })
 }
 
-module.exports = withProcessTextActivity
+const PLUGIN_NAME = 'react-native-process-text'
+const PLUGIN_VERSION = '0.1.1'
+
+module.exports = createRunOncePlugin(withProcessTextActivity, PLUGIN_NAME, PLUGIN_VERSION)

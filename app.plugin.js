@@ -1,1 +1,1 @@
-module.exports = require('./src/expo-plugin/withProcessText')
+module.exports = require('./lib/module/expo-plugin')
