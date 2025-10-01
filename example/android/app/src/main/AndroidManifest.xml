@@ -27,6 +27,7 @@
             android:name="com.processtext.ProcessTextActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:label="Process Text Label"
             android:taskAffinity="${applicationId}.processtext"
             android:excludeFromRecents="true">
             <intent-filter>
