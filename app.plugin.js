@@ -1,1 +1,1 @@
-module.exports = require('./lib/module/expo-plugin')
+module.exports = require('./lib/module/plugin/withProcessText.cjs')
