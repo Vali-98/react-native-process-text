@@ -1,17 +1,27 @@
-const { withAndroidManifest, createRunOncePlugin } = require('@expo/config-plugins')
+import { withAndroidManifest, type ConfigPlugin } from '@expo/config-plugins'
+import { createRunOncePlugin } from '@expo/config-plugins'
+
+/**
+ * Options for the ProcessTextActivity plugin
+ */
+interface ProcessTextActivityOptions {
+    label?: string
+}
 
 /**
  * Adds a ProcessTextActivity to AndroidManifest with a custom label.
- * @param {import('@expo/config-plugins').ExpoConfig} config
- * @param {{ label?: string }} options
+ * @param config Expo configuration
+ * @param options Plugin options
  */
-const withProcessTextActivity = (config, { label = 'Process Text' } = {}) => {
+const withProcessTextActivity: ConfigPlugin<ProcessTextActivityOptions> = (
+    config,
+    { label = 'Process Text' } = {}
+) => {
     return withAndroidManifest(config, (config) => {
-        const androidManifest = config.modResults
-
+        const androidManifest: any = config.modResults
         // Avoid adding duplicate activity
         const existingActivity = androidManifest.manifest.application[0].activity?.find(
-            (activity) => activity.$['android:name'] === 'com.processtext.ProcessTextActivity'
+            (activity: any) => activity.$['android:name'] === 'com.processtext.ProcessTextActivity'
         )
 
         if (!existingActivity) {
@@ -48,4 +58,4 @@ const withProcessTextActivity = (config, { label = 'Process Text' } = {}) => {
 const PLUGIN_NAME = 'react-native-process-text'
 const PLUGIN_VERSION = '0.1.1'
 
-module.exports = createRunOncePlugin(withProcessTextActivity, PLUGIN_NAME, PLUGIN_VERSION)
+export default createRunOncePlugin(withProcessTextActivity, PLUGIN_NAME, PLUGIN_VERSION)
